@@ -428,11 +428,23 @@ Create a new component by adding this file src/components/List.vue
   <div class="hello">
      <div id="todo-list-example" class="container">
         <div class="row">
-           <div class="col-md-6 mx-auto">
-              <h1 class="text-center">TODO List App</h1>
+           <div class="col-md-10 mx-auto">
+              <h1 class="text-center">Analysis</h1>
               <form v-on:submit.prevent="addNewTask">
-                 <label for="tasknameinput">Task Name</label>
-                 <input v-model="taskname" type="text" id="tasknameinput" class="form-control" placeholder="Add New Task">
+              <div class="row">
+                <div class="col-md-4">
+                   <label for="tasknameinput">Task Name</label>
+                   <input v-model="taskname" type="text" id="tasknameinput" class="form-control" placeholder="Add New Task">
+                </div>
+                <div class="col-md-4">
+                   <label for="topicnameinput">Task Name</label>
+                   <input v-model="topicname" type="text" id="topicnameinput" class="form-control" placeholder="Add New Topic">
+                </div>
+                <div class="col-md-4">
+                   <label for="subtopicnameinput">Task Name</label>
+                   <input v-model="subtopicname" type="text" id="subtopicnameinput" class="form-control" placeholder="Add New Sub-Topic">
+                </div>
+              </div>
                  <button v-if="this.isEdit == false" type="submit" class="btn btn-success btn-block mt-3">
                     Submit
                  </button>
@@ -442,10 +454,17 @@ Create a new component by adding this file src/components/List.vue
               </form>
 
               <table class="table">
-                 <tr v-for="(todo) in todos" v-bind:key="todo.id" v-bind:title="todo.task_name">
+                <tr>
+                  <th>Task Name</th>
+                  <th>Topic</th>
+                  <th>Sub_topic</th>
+                </tr>
+                 <tr v-for="(todo) in todos" v-bind:key="todo.id" v-bind:title="todo.task_name" v-bind:edit_topic="todo.topic" v-bind:edit_subtopic="todo.sub_topic" >
                     <td class="text-left">{{todo.task_name}}</td>
+                    <td class="text-left">{{todo.topic}}</td>
+                    <td class="text-left">{{todo.sub_topic}}</td>
                     <td class="text-right">
-                       <button class="btn btn-info" v-on:click="editTask(todo.task_name, todo.id)">Edit</button>
+                       <button class="btn btn-info" v-on:click="editTask(todo.task_name, todo.topic, todo.sub_topic, todo.id)">Edit</button>
                        <button class="btn btn-danger" v-on:click="deleteTask(todo.id)">Delete</button>
                     </td>
                  </tr>
@@ -465,6 +484,8 @@ name: 'List',
         todos: [],
         id: '',
         taskname: '',
+        topicname: '',
+        subtopicname: '',
         isEdit: false
      }
   },
@@ -484,23 +505,29 @@ name: 'List',
         )
      },
      addNewTask() {
-         axios.post("/api/task", {task_name: this.taskname})
+         axios.post("/api/task", {task_name: this.taskname, topic: this.topicname, sub_topic: this.subtopicname})
          .then((res) => {
              this.taskname = ''
+             this.topicname = ''
+             this.subtopicname = ''
              this.getTasks()
          }).catch((err) => {
              console.log(error)
          })
      },
-     editTask(title, id){
+     editTask(title, edit_topic, edit_subtopic, id){
         this.id = id
         this.taskname = title
+        this.topicname = edit_topic
+        this.subtopicname = edit_subtopic
         this.isEdit = true
      },
      updateTask() {
-        axios.put(`/api/task/${this.id}`, {task_name: this.taskname})
+        axios.put(`/api/task/${this.id}`, {task_name: this.taskname, topic: this.topicname, sub_topic: this.subtopicname})
         .then((res) => {
            this.taskname = ''
+           this.topicname = ''
+           this.subtopicname = ''
            this.isEdit = false
            this.getTasks()
            console.log(res)
@@ -540,19 +567,14 @@ li {
 a {
   color: #42b983;
 }
+th {
+   text-align: center;
+}
+td, tr {
+   text-align: center;
+}
 </style>
 
-In App.vue you will need,
-
-<script>
-import List from './components/List'
-export default {
-  name: 'App',
-  components: {
-    List
-  }
-}
-</script>
 ```
 
 Navigating to localhost:8080 should allow you to see the dashboard.
