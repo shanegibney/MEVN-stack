@@ -351,7 +351,7 @@ export default new Router({
 
 Create a new component by adding this file src/components/List.vue
 
-<template>
+``<template>
   <div class="hello">
      <div id="todo-list-example" class="container">
         <div class="row">
@@ -381,7 +381,7 @@ Create a new component by adding this file src/components/List.vue
         </div>
      </div>
   </div>
-</template>
+</template>``
 
 <script>
 import axios from 'axios'
