@@ -14,10 +14,17 @@ Using phpmyadmin or from command line create a new MySQL database called 'nodejs
 
 Use user 'root' and add a password.
 
-Create a table called tbl_tasks with just two columns.
+Create a table called tbl_tasks with just four columns.
+
+```
  Id (int) auto-increment
 
  task_name (text)
+
+ topic (text)
+
+ sub_topic (text)
+ ```
 
 Create a home directory for this project,
 
